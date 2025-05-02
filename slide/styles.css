@@ -1,0 +1,28 @@
+/* styles.css */
+
+.reveal {
+  font-size: 20px;
+  line-height: 1.4;
+  font-family: "Helvetica", sans-serif;
+}
+
+.reveal h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.reveal h2 {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.reveal p,
+.reveal li {
+  font-size: 1em;
+  line-height: 1.4;
+}

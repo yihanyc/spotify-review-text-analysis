@@ -1,0 +1,275 @@
+<!-- preamble start -->
+
+    <script>
+
+      function styleCell_d4cetuh9he48nlaxujmz(i, j, css_id) {
+          var table = document.getElementById("tinytable_d4cetuh9he48nlaxujmz");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_d4cetuh9he48nlaxujmz');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_d4cetuh9he48nlaxujmz(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_d4cetuh9he48nlaxujmz");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 44, j: 1 },  ], css_id: 'tinytable_css_g23wmhjwytprn2l2z9tg',}, 
+          { positions: [ { i: 38, j: 1 },  ], css_id: 'tinytable_css_dauexxhc7rdwtump200n',}, 
+          { positions: [ { i: 1, j: 1 }, { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 4, j: 1 }, { i: 5, j: 1 }, { i: 6, j: 1 }, { i: 7, j: 1 }, { i: 8, j: 1 }, { i: 9, j: 1 }, { i: 10, j: 1 }, { i: 11, j: 1 }, { i: 12, j: 1 }, { i: 13, j: 1 }, { i: 14, j: 1 }, { i: 15, j: 1 }, { i: 16, j: 1 }, { i: 17, j: 1 }, { i: 18, j: 1 }, { i: 19, j: 1 }, { i: 20, j: 1 }, { i: 21, j: 1 }, { i: 22, j: 1 }, { i: 23, j: 1 }, { i: 24, j: 1 }, { i: 25, j: 1 }, { i: 26, j: 1 }, { i: 27, j: 1 }, { i: 28, j: 1 }, { i: 29, j: 1 }, { i: 30, j: 1 }, { i: 31, j: 1 }, { i: 32, j: 1 }, { i: 33, j: 1 }, { i: 34, j: 1 }, { i: 35, j: 1 }, { i: 36, j: 1 }, { i: 37, j: 1 }, { i: 42, j: 1 }, { i: 39, j: 1 }, { i: 40, j: 1 }, { i: 41, j: 1 }, { i: 43, j: 1 },  ], css_id: 'tinytable_css_5si4we0ssje5jo453b5b',}, 
+          { positions: [ { i: 0, j: 1 },  ], css_id: 'tinytable_css_eozp1wpih0w17vk93sc3',}, 
+          { positions: [ { i: 44, j: 0 },  ], css_id: 'tinytable_css_qqim9met7tnxynt4ep47',}, 
+          { positions: [ { i: 38, j: 0 },  ], css_id: 'tinytable_css_k621vokv30k1kfase2ip',}, 
+          { positions: [ { i: 1, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 6, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 }, { i: 9, j: 0 }, { i: 10, j: 0 }, { i: 11, j: 0 }, { i: 12, j: 0 }, { i: 13, j: 0 }, { i: 14, j: 0 }, { i: 15, j: 0 }, { i: 16, j: 0 }, { i: 17, j: 0 }, { i: 18, j: 0 }, { i: 19, j: 0 }, { i: 20, j: 0 }, { i: 21, j: 0 }, { i: 22, j: 0 }, { i: 23, j: 0 }, { i: 24, j: 0 }, { i: 25, j: 0 }, { i: 26, j: 0 }, { i: 27, j: 0 }, { i: 28, j: 0 }, { i: 29, j: 0 }, { i: 30, j: 0 }, { i: 31, j: 0 }, { i: 32, j: 0 }, { i: 33, j: 0 }, { i: 34, j: 0 }, { i: 35, j: 0 }, { i: 36, j: 0 }, { i: 37, j: 0 }, { i: 42, j: 0 }, { i: 39, j: 0 }, { i: 40, j: 0 }, { i: 41, j: 0 }, { i: 43, j: 0 },  ], css_id: 'tinytable_css_11px671dhxw6an122wfc',}, 
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_v5efyfp452sr5c6yc1u7',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_d4cetuh9he48nlaxujmz(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_g23wmhjwytprn2l2z9tg, .table th.tinytable_css_g23wmhjwytprn2l2z9tg { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_dauexxhc7rdwtump200n, .table th.tinytable_css_dauexxhc7rdwtump200n { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_5si4we0ssje5jo453b5b, .table th.tinytable_css_5si4we0ssje5jo453b5b { text-align: center; }
+      .table td.tinytable_css_eozp1wpih0w17vk93sc3, .table th.tinytable_css_eozp1wpih0w17vk93sc3 { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_qqim9met7tnxynt4ep47, .table th.tinytable_css_qqim9met7tnxynt4ep47 { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_k621vokv30k1kfase2ip, .table th.tinytable_css_k621vokv30k1kfase2ip { text-align: left; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_11px671dhxw6an122wfc, .table th.tinytable_css_11px671dhxw6an122wfc { text-align: left; }
+      .table td.tinytable_css_v5efyfp452sr5c6yc1u7, .table th.tinytable_css_v5efyfp452sr5c6yc1u7 { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_d4cetuh9he48nlaxujmz" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>−5.528</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.207)</td>
+                </tr>
+                <tr>
+                  <td>anticipation</td>
+                  <td>0.049</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.090)</td>
+                </tr>
+                <tr>
+                  <td>anger</td>
+                  <td>−0.283</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.137)</td>
+                </tr>
+                <tr>
+                  <td>disgust</td>
+                  <td>0.464</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.138)</td>
+                </tr>
+                <tr>
+                  <td>fear</td>
+                  <td>0.086</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.119)</td>
+                </tr>
+                <tr>
+                  <td>joy</td>
+                  <td>−0.240</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.121)</td>
+                </tr>
+                <tr>
+                  <td>sadness</td>
+                  <td>−0.079</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.107)</td>
+                </tr>
+                <tr>
+                  <td>surprise</td>
+                  <td>0.107</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.130)</td>
+                </tr>
+                <tr>
+                  <td>trust</td>
+                  <td>−0.226</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.105)</td>
+                </tr>
+                <tr>
+                  <td>negative</td>
+                  <td>−0.017</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.096)</td>
+                </tr>
+                <tr>
+                  <td>positive</td>
+                  <td>0.179</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.074)</td>
+                </tr>
+                <tr>
+                  <td>word_count</td>
+                  <td>0.010</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.003)</td>
+                </tr>
+                <tr>
+                  <td>competitor_mention</td>
+                  <td>−0.103</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.426)</td>
+                </tr>
+                <tr>
+                  <td>PredictedLabel_LDAGeneral UX Feedback</td>
+                  <td>0.076</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.252)</td>
+                </tr>
+                <tr>
+                  <td>PredictedLabel_LDAMusic and Playlist Features</td>
+                  <td>−0.717</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.288)</td>
+                </tr>
+                <tr>
+                  <td>PredictedLabel_LDAOther</td>
+                  <td>−1.031</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.250)</td>
+                </tr>
+                <tr>
+                  <td>PredictedLabel_LDAPlayback Issues</td>
+                  <td>0.176</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.229)</td>
+                </tr>
+                <tr>
+                  <td>PredictedLabel_LDAPositive Experience</td>
+                  <td>−0.915</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.349)</td>
+                </tr>
+                <tr>
+                  <td>PredictedLabel_LDATechnical Fixes</td>
+                  <td>−0.288</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>(0.255)</td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.</td>
+                  <td>60915</td>
+                </tr>
+                <tr>
+                  <td>AIC</td>
+                  <td>2769.7</td>
+                </tr>
+                <tr>
+                  <td>BIC</td>
+                  <td>2941.0</td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.</td>
+                  <td>−1365.859</td>
+                </tr>
+                <tr>
+                  <td>F</td>
+                  <td>7.109</td>
+                </tr>
+                <tr>
+                  <td>RMSE</td>
+                  <td>0.06</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->

@@ -1,0 +1,276 @@
+---
+title: "How Do Users Review Spotify?"
+subtitle: "Analyzing Emotion, Topics, and Platform Replies Using Text as Data and Logistic Regression"
+authors:
+  - name: Yihan Chen
+    affiliation: Georgetown University
+    corresponding: true
+date: April 29 2025
+format: 
+  revealjs:
+    theme: serif
+    slide-number: true
+    toc: true
+    toc-depth: 1
+    self-contained: true
+    transition: fade
+    width: 960
+    height: 540
+    css: styles.css
+    main-font: "Helvetica"
+    pdf-export: true
+execute: 
+  echo: true
+  warning: false
+  message: false
+---
+
+# 1. Introduction
+
+Spotify has been the most popular music streaming platform. On the Google Play Store, users leave public reviews about the app—yet only a few ever receive an official reply from Spotify.
+
+::: {.columns}
+::: {.column width="50%"}
+![](figures/subscriber.png){width=100%}
+:::
+
+::: {.column width="50%"}
+**Goals**:  
+
+- **(1) Business Strategy Perspective**: Analyze user-generated reviews to get key experience themes and sentiment patterns, to improve app functionality, user satisfaction, and retention.
+
+- **(2) Digital Platform Governance Perspective**: Provide insights into Spotify’s public engagement practices, including reply prioritization and transparency considerations.
+:::
+:::
+
+
+## 1.1 Research Questions
+
+- **RQ1**: How do Spotify users describe their **experience** in written reviews?
+
+  **H1**: Most reviews focus on **app functionality, usability, and technical performance** rather than music content.
+
+- **RQ2**: Which review **topics or tones** are more likely to receive an **official reply**---and what does this reveal about platform priorities or transparency?
+
+  **H2**: Reviews that express **dissatisfaction**, particularly those mentioning **technical issues or account problems**, are more likely.
+
+## 1.2 Dataset
+
+- 61,594 Spotify user reviews scraped from Google Play (2022 Kaggle dataset).
+- Key fields collected:
+  - **Star Rating** (1–5)
+  - **Review Text**
+  - **Review Timestamp**
+  - **Number of Thumbs-up**
+  - **Official Reply** (if any)
+
+Deeper information needed for meaningful analysis is not directly available. Specifically:
+
+- **Review Categories**: Does the review focus on App Experience or something else (e.g., music content)?
+- **Review Topics**: Is the review about technical issues, UX features, account problems, or other concerns?
+- **Sentiment and Emotions**: Does the review convey joy, anger, frustration, or satisfaction?
+- **Reply Status**: Which reviews received an official response (0/1)?
+
+
+## 1.3 Methodology
+
+- **Manual Annotation:**  
+  Hand-labeled 2,000 reviews into categories (e.g., App Experience vs. Other) for supervised learning.
+
+- **Supervised Machine Learning:**  
+  - Models: Naïve Bayes, SVM (linear kernel), and Lasso (logistic regression)  
+  - Features: TF-IDF weighted matrices and GloVe word embeddings  
+  - Cross-validation: 5-fold CV for hyperparameter tuning (e.g., SVM cost, Lasso lambda)
+
+- **Unsupervised Topic Modeling:**  
+  - LDA (Latent Dirichlet Allocation) applied to App Experience reviews  
+  - Number of topics selected based on interpretability (K = 6)
+
+- **Sentiment Analysis:**  
+  - NRC lexicon mapping to classify emotions (e.g., anger, joy, sadness) at the review level
+
+- **Logistic Regression Analysis:**  
+  - Investigated predictors of official reply likelihood using review sentiment, topic, and length
+
+# 2. Labeling Results
+
+## 2.1 Supervised Machine Learning: Review Category Prediction
+
+&nbsp; <!-- 插入空行 -->
+
+:::: {.columns}
+
+::: {.column width="40%"}
+![](figures/4model.png){width=100%}
+:::
+
+::: {.column width="60%"}
+
+| Metric             | TF-IDF Lasso | Word Embedding Lasso |
+|:-------------------|:------------|:--------------------|
+| Accuracy            | 0.83         | 0.82                 |
+| Kappa               | 0.648        | 0.613                |
+| Precision           | 0.868        | 0.837                |
+| Recall              | 0.846        | 0.878                |
+| F1 Score            | 0.857        | 0.857                |
+| Balanced Accuracy   | 0.826        | 0.802                |
+
+:::
+::::
+
+
+- **TF-IDF Lasso** slightly outperformed Word Embedding Lasso across multiple evaluation metrics.  
+
+- Selected **TF-IDF Lasso** for full dataset classification based on higher accuracy and better balanced performance.
+
+## 2.2 Unsupervised Topic Modeling: Sub-Themes in App Experience Reviews
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](figures/top10terms.png){width=120%}
+:::
+
+::: {.column width="50%"}
+![](figures/wordcloud.png){width=100%}
+:::
+
+::::
+
+- **LDA Topic Modeling** (K = 6) revealed key sub-themes within App Experience feedback.
+
+
+
+# 3. Descriptive Overview
+
+## 3.1 Sentiment, Reply Rate, Label
+
+![](figures/plot123.png){width=95%}
+
+- Most reviews are **positive** in tone.
+- Only **3.5%** of reviews receive an official reply.
+- Around **60%** of all reviews are classified as **App Experience**.
+
+## 3.2 Sentiment-Reply Patterns by Category
+
+![](figures/plot456.png){width=95%}
+
+- **App Experience** reviews are more likely to have negative star ratings.
+- **Negative** reviews are more likely to receive a reply than **positive** ones.
+- Reviews about **App Experience** are more likely to be replied to than reviews about other topics.
+
+
+## 3.3 Duplicate Reviews
+
+![](figures/duplicate.png){width=90%}
+
+- One interesting observation is that the same review can get different ratings.
+
+## 3.4 Emotion Score
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](figures/emotions-plot-reply.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![](figures/emotion-plot-topic.png){width=100%}
+:::
+
+::::
+
+- **Disgust**, **Fear**, and **Negative** emotions are **higher** in reviews that received a **reply**.
+- Reviews expressing **Joy** and **Trust** are **less likely** to receive a reply.
+
+## 3.5 Competitors
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](figures/competitor-1.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![](figures/competitor-3.png){width=100%}
+:::
+
+::::
+
+- Apple Music, YouTube Music and Amazon Music clearly dominate in emotional engagement (**joy**, **positive** and **sadness**).
+
+# 4. Reply Analysis
+
+## 4.1 Logistic Regression
+
+<img src="figures/logit.png" style="display: block; margin: auto; width: 80%;" />
+
+Are emotion, word count, competitor-mention, and topic labels linked to whether a user gets a Spotify reply?
+
+<img src="figures/plot8910.png" style="display: block; margin: auto; width: 45%;" />
+
+
+## 4.2 Regression Result
+
+<img src="figures/result_00.png" style="display: block; margin: auto; width: 95%;" />
+
+- Spotify is more likely to reply to **longer reviews** and those expressing **disgust**.
+- **Joyful** or **trusting** tones reduce reply likelihood.
+- Reviews about **technical** and **account** issues get more attention.
+- Reviews on **music features** or general **praise** are often ignored.
+
+## 4.3 SMOTE Adjustment for Reply Imbalance
+
+To evaluate whether findings are robust to imbalance, I re-estimated the reply model using SMOTE-balanced data.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](figures/result_01.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![](figures/SMOTE-plot-1.png){width=120%}
+:::
+
+::::
+
+
+
+# 5. Discussion
+
+- ✅ Most users complain about **app function**, not music (**RQ1 supported**)
+- 📉 Spotify replies mostly to **negative, detailed reviews** (disgust, account issues)
+- 💬 **Joyful/trusting reviews** are often ignored—missed opportunity to engage satisfied users
+- 🛠️ Reply strategy is **reactive (problem)**, not proactive (praise) (**RQ2 supported**)
+- 🔄 SMOTE results confirm key findings are **robust**
+- ⚠️ **Competitor mentions** evoke strong emotion—signal of potential **churn risk**
+
+## 5.1 Limitations
+
+- 🎯 **Classification**:  
+  Word embedding models underperformed compared to TF-IDF Lasso; further tuning or larger embedding datasets may improve results.
+  
+- 🧩 **Topic Modeling**:  
+  Some topics show overlap and limited distinctiveness; better preprocessing, validarion, or alternative models could enhance separation.
+
+- 🗑️ **Duplicates**:  
+  Although duplicate reviews were retained, their short text length may reduce analysis quality; impact is limited given the small number (~270).
+
+- 🎵 **Word Clouds**:  
+  Repetitive terms like "song" and "songs" appeared separately - minor stemming or tokenization issues.
+
+- 📉 **Regression Sample Size**:  
+  The number of replied reviews was extremely small (<3.5%), limiting statistical power before adjustment.
+
+- 🏛️ **Policy Implications**:  
+  Although reply patterns hint at engagement priorities, deeper exploration is needed to fully assess platform transparency and accountability.
+
+
+## 5.2 Lessons Learned and Next Steps
+
+- Understanding models, focusing on details, and building a structured workflow greatly improved project quality
+
+- Future work could explore more advanced models and deeper policy implications
+
+# Thank You!
