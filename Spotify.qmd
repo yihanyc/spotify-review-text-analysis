@@ -1,14 +1,14 @@
 ---
 title: "How Do Users Review Spotify?"
-subtitle: "Analyzing Emotion, Topics, and Platform Replies Using TAD and Logistic Regression"
+subtitle: "Analyzing Emotion, Topics, and Platform Replies Using TAD"
 authors:
   - name: Yihan Chen
     email: yc1140@georgetown.edu
     affiliation: Georgetown University
     corresponding: true
 df-print: kable
-title-block-banner: "figures/spotify_cover.png" 
-title-block-banner-color: black  
+title-block-banner: "figures/spotify_cover.png"
+title-block-banner-color: black
 format:
   html:
     toc: true
@@ -21,6 +21,7 @@ editor:
   markdown:
     wrap: 72
 ---
+
 
 ## 1. Introduction
 

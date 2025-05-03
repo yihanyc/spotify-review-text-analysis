@@ -1,0 +1,550 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup[figure]{labelformat=default,labelsep=period,name=Figure}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={How Do Users Review Spotify? Analyzing Emotion, Topics, and Platform Replies Using Text-as-Data},
+  pdfauthor={Yihan Chen},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{How Do Users Review Spotify? Analyzing Emotion, Topics, and
+Platform Replies Using Text-as-Data}
+\author{Yihan Chen}
+\date{2025-05-03}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\begin{center}
+\textbf{Georgetown University, McCourt School of Public Policy}  
+Washington, DC 20001  
+\end{center}
+
+\section*{Significance Statement}
+
+Understanding how Spotify selectively replies to user reviews sheds
+light on platform governance, digital fairness, and customer engagement
+strategy. By analyzing emotional tone and review content using TAD and
+logistic regression, this study highlights patterns in review topics and
+corporate responsiveness, contributing to business insight and broader
+discussions on digital transparency and priority.
+
+\section*{Abstract}
+
+This study analyzes 60,000 Spotify reviews to examine what drives
+platform replies. Using text classification, topic modeling, and
+logistic regression, we find replies are more likely for detailed,
+negative feedback---especially with technical issues or emotions like
+disgust. Joy, praise, and competitor mentions have little impact.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+\hypertarget{motivation}{%
+\subsection{Motivation}\label{motivation}}
+
+Spotify has become the global leader in music streaming, with over 252
+million premium subscribers as of Q3 2024 (Statista, 2024; Figure 1).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/subscriber} 
+
+}
+
+\caption{Number of Spotify premium subscribers worldwide from Q1 2015 to Q4 2024.}\label{fig:fig.subs}
+\end{figure}
+
+While subscription metrics reveal growth, understanding user
+satisfaction and retention requires deeper analysis beyond numerical
+figures. User-generated content (UGC), especially app store reviews,
+provides insights into customer experiences.
+
+These reviews reflect not only product satisfaction but also user
+frustrations and unmet expectations. Platforms like Spotify occasionally
+respond to user reviews, but the dynamics of which reviews receive
+replies remain largely unexplored.
+
+\hypertarget{prior-research}{%
+\subsection{Prior Research}\label{prior-research}}
+
+Literature supports that text analysis informs consumer insights. Pang
+\& Lee (2008) and Liu (2012) laid the foundation of sentiment analysis
+for understanding customer satisfaction. Tirunillai \& Tellis (2012)
+showed that user-generated content predicts business performance, while
+Blei et al.~(2003) introduced LDA topic modeling to identify consumer
+concerns.
+
+In digital media, Datta et al.~(2018) found that users' sentiments
+correlate with music subscriber growth, and Piskorski et al.~(2019)
+demonstrated that negative sentiment spikes signal churn risk. These
+findings support the analysis of user sentiment in Spotify's reviews and
+can inform market decisions.
+
+\hypertarget{research-questions}{%
+\subsection{Research Questions}\label{research-questions}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{RQ1}: How do Spotify users describe their experience in
+  written reviews?\\
+\item
+  \textbf{RQ2}: Which review topics or tones are more likely to receive
+  an official reply---and what does this reveal about platform
+  priorities or transparency?
+\end{itemize}
+
+\hypertarget{report-overview}{%
+\subsection{Report Overview}\label{report-overview}}
+
+This report begins by describing the dataset and annotation process,
+followed by supervised classification and topic modeling. I then
+evaluate emotional tone and reply likelihood through logistic
+regression, and conclude with a discussion of key findings and
+implications.
+
+\hypertarget{data-and-methods}{%
+\section{Data and Methods}\label{data-and-methods}}
+
+\hypertarget{data-source-and-unit-of-observation}{%
+\subsection{Data Source and Unit of
+Observation}\label{data-source-and-unit-of-observation}}
+
+The dataset, published on Kaggle (2022), contains 61,594 Spotify app
+reviews from the Google Play Store. Each entry includes the text of the
+review, timestamp, rating (1--5), helpfulness score, and reply (if any).
+Each observation corresponds to one user's review.
+
+\hypertarget{variables-of-interest}{%
+\subsection{Variables of Interest}\label{variables-of-interest}}
+
+The dataset used in this study comprises a set of variables that support
+both classification and regression analysis (Table 1). Each review is
+accompanied by structured metadata and derived features that inform our
+analysis of user experience and reply behavior.
+
+\begin{center}\includegraphics[width=0.8\linewidth]{figures/table1} \end{center}
+
+\hypertarget{data-wrangling-steps}{%
+\subsection{Data Wrangling Steps}\label{data-wrangling-steps}}
+
+To prepare the dataset for analysis, I implemented a structured data
+cleaning and transformation pipeline.
+
+First, I converted all review text to lowercase, removed duplicates, and
+eliminated special characters to ensure consistency. The cleaned text
+was then tokenized and matched with the NRC lexicon to compute
+review-level emotion scores across ten emotion categories.
+
+Using a manually labeled random sample of 2,000 reviews, I initially
+created four functional categories: Technical Issues, UX \& Features,
+Price \& Ads, and Other. However, due to overlapping themes and
+classification ambiguity---especially between Technical and UX
+feedback---I consolidated these into a binary scheme to improve
+annotation consistency and model performance. Therefore, the final
+categories were: (1) ``App Experience'': reviews mainly focused on
+technical problems, user interface, and app functionality; (2)
+``Other'': reviews related to pricing, ads, music content, or general
+sentiment. The ``App Experience'' category may include all forms of
+interaction with the Spotify platform, including the mobile app,
+website, and other interfaces. It may also cover reviews that partially
+mention pricing, praise, or subscription but are primarily focused on
+user experience. This simplified structure allowed the classifier to
+more reliably distinguish actionable user feedback tied to user
+experience.
+
+I also engineered several features to support downstream analysis.
+Binary flags were created to indicate whether a review received an
+official Spotify reply and whether a competing platform (e.g., Apple
+Music) was mentioned. I computed word counts for each review and
+detected specific competitor references.
+
+For classification, I constructed both TF-IDF and word embedding
+matrices to predict topic labels. To perform unsupervised topic
+modeling, I filtered the App Experience reviews and preprocessed them
+for input into an LDA model.
+
+To address class imbalance in reply behavior, I applied SMOTE (Synthetic
+Minority Oversampling Technique), generating synthetic samples for the
+minority class (Replied = 1). This rebalancing allowed me to fit more
+robust logistic regression models.
+
+\hypertarget{analysis}{%
+\section{Analysis}\label{analysis}}
+
+\hypertarget{supervised-classification}{%
+\subsection{Supervised Classification}\label{supervised-classification}}
+
+To distinguish between App Experience and Other reviews, I trained three
+supervised models---Na"\{i\}ve Bayes, SVM, and Lasso---on the annotated
+subset. Among these, the Lasso logistic regression model achieved the
+highest accuracy (83\%) and interpretability (Table 2). I applied this
+model to classify the remaining reviews in the dataset.
+
+\begin{center}\includegraphics[width=0.8\linewidth]{figures/table2} \end{center}
+
+\hypertarget{topic-modeling}{%
+\subsection{Topic Modeling}\label{topic-modeling}}
+
+LDA was applied to App Experience reviews (\textasciitilde38,000
+records), revealing six subtopics (Table 3): Technical Fixes, Account \&
+Subscription, General UX Feedback, Playback Issues, Music \& Playlist
+Features, and Positive Experience.
+
+\begin{center}\includegraphics[width=0.8\linewidth]{figures/table3} \end{center}
+
+\hypertarget{sentiment-and-emotion}{%
+\subsection{Sentiment and Emotion}\label{sentiment-and-emotion}}
+
+Sentiment was categorized based on ratings: 1--2 as negative, 3 neutral,
+and 4--5 positive. NRC Lexicon provided 10 emotion scores (e.g., anger,
+joy, disgust) for each review.
+
+\hypertarget{logistic-regression-reply-prediction}{%
+\subsection{Logistic Regression: Reply
+Prediction}\label{logistic-regression-reply-prediction}}
+
+I modeled reply likelihood using emotional scores, review length,
+competitor mentions, and topic labels. A second model applied SMOTE to
+account for class imbalance. The model specification is shown as
+follows:
+
+\begin{center}\includegraphics[width=0.8\linewidth]{figures/logit} \end{center}
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+\hypertarget{descriptive-overview}{%
+\subsection{Descriptive Overview}\label{descriptive-overview}}
+
+49 percent of Spotify reviews are positive in tone, with around 60
+percent classified under the App Experience category. However, only 3.5
+percent of reviews received an official reply from the platform,
+highlighting a significant gap in engagement (Figure 2).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/plot123} 
+
+}
+
+\caption{Descriptive overview: sentiment tone and App Experience classification share among Spotify reviews.}\label{fig:fig.2}
+\end{figure}
+
+\hypertarget{sentiment-emotion-score-and-reply}{%
+\subsection{Sentiment, Emotion Score, and
+Reply}\label{sentiment-emotion-score-and-reply}}
+
+Spotify tends not to respond to emotionally extreme or overtly positive
+reviews; instead, it is more likely to engage with detailed expressions
+of dissatisfaction. Reviews expressing disgust or positive sentiment are
+more likely to receive a response (Figure 3), with disgust showing a
+significant positive effect (coefficient = 0.464, \(p < 0.001\)). In
+contrast, reviews characterized by anger, joy, or trust tend to be
+overlooked---joy (coefficient = -0.240, \(p < 0.05\)) and trust
+(coefficient = -0.226, \(p < 0.05\)) both significantly reduce the
+likelihood of a reply.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/emotionsreply} 
+
+}
+
+\caption{Average emotion scores by reply status: replied vs. unreplied reviews across ten NRC emotion categories.}\label{fig:fig.3}
+\end{figure}
+
+\hypertarget{topics-spotify-prioritizes-problem-solving}{%
+\subsection{Topics: Spotify Prioritizes
+Problem-Solving}\label{topics-spotify-prioritizes-problem-solving}}
+
+Spotify appears more responsive to critical reviews tied to app
+performance than to general praise. Approximately 51\% of reviews
+classified as App Experience were negative, compared to just 23\% in the
+Other category. Furthermore, over 75\% of all replies were directed to
+App Experience reviews.
+
+Different topics share broadly similar distributions of emotion scores
+(Figure 4), with one key exception: the Positive Experience topic tends
+to reflect high levels of joy and positive sentiment, yet is one of the
+least likely to receive a reply.
+
+Spotify prioritizes resolving technical access and service issues over
+addressing feature feedback or acknowledging general satisfaction.
+Compared to the reference category (Account \& Subscription), reviews
+classified as Music and Playlist Features (coefficient = -0.717,
+\(p < 0.05\)), Other (coefficient = -1.031, \(p < 0.001\)), and Positive
+Experience (coefficient = -0.915, \(p < 0.01\)) are significantly less
+likely to receive a response.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/emotionstopic} 
+
+}
+
+\caption{Emotion scores by topic: each LDA-derived topic displays its corresponding average emotion levels using the NRC lexicon.}\label{fig:fig.4}
+\end{figure}
+
+\hypertarget{competitor-mentions-mentioning-others-doesnt-get-noticed}{%
+\subsection{Competitor Mentions: Mentioning Others Doesn't Get
+Noticed}\label{competitor-mentions-mentioning-others-doesnt-get-noticed}}
+
+The ten most frequently mentioned competitors in Spotify reviews are
+Pandora, YouTube Music, Apple Music, Amazon Music, SoundCloud, Tidal,
+Deezer, Gaana, Wynk, and Napster. Among the top 5 mentioned competitors,
+Apple Music, YouTube Music, and Amazon Music tend to show the most joy,
+positive sentiment, and sadness scores (Figure 5). SoundCloud, YouTube
+Music, and Amazon Music are often mentioned in negative contexts,
+whereas Apple Music and Pandora are more frequently cited in positive or
+neutral reviews).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/competitor} 
+
+}
+
+\caption{Emotion scores by top 5 competitors}\label{fig:fig.5}
+\end{figure}
+
+However, Spotify did not explicitly engage with replies containing
+competitors. According to the logistic regression model, the presence of
+a competitor mention is not a statistically significant predictor of
+receiving a reply (coefficient = -0.103, \(p > 0.05\)).
+
+\hypertarget{word-count-spotify-values-detailed-user-feedback}{%
+\subsection{Word Count: Spotify Values Detailed User
+Feedback}\label{word-count-spotify-values-detailed-user-feedback}}
+
+Most reviews are relatively concise: the average review contains 32
+words, and the interquartile range spans from 14 to 43 words, though
+some extend up to 738. Reviews that are longer in length are
+significantly more likely to receive a response: each additional word
+increases the probability of receiving a reply by approximately 1\%
+(coefficient = 0.010, \(p < 0.01\)).
+
+\hypertarget{smote-adjustment-for-class-imbalance}{%
+\subsection{SMOTE Adjustment for Class
+Imbalance}\label{smote-adjustment-for-class-imbalance}}
+
+Spotify's engagement is systematically focused on complaints, even under
+balanced sampling. To validate the robustness of these findings, I
+re-estimated the logistic regression using a SMOTE-balanced dataset to
+address the low reply rate. The results were largely consistent:
+emotionally negative tones like disgust and technical topics like
+Account \& Subscription remained strong predictors of reply likelihood
+(Figure 6; Table 4).
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{figures/comparison} 
+
+}
+
+\caption{Comparison of Coefficient Estimates}\label{fig:fig.6}
+\end{figure}
+
+\begin{center}\includegraphics[width=0.8\linewidth]{figures/table4} \end{center}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+Spotify replies to only a small fraction of user reviews and does so
+selectively, prioritizing longer, more detailed reviews that express
+dissatisfaction, especially those involving technical or service-related
+issues. Reviews with emotionally nuanced tones like disgust are more
+likely to receive a response, while those expressing joy, trust, or
+general praise tend to be overlooked. Topic modeling and regression
+results further confirm that Spotify is most responsive to reviews under
+categories like Account \& Subscription. Mentioning competitors such as
+Apple Music or YouTube Music does not significantly influence reply
+behavior.
+
+From a business strategy perspective, the analysis identifies key
+experience themes and sentiment patterns that can inform improvements in
+Spotify's app functionality, user satisfaction, and retention efforts.
+By highlighting which types of reviews prompt engagement---namely those
+that are detailed, emotionally nuanced, and related to technical
+service---Spotify can better prioritize customer service efforts and
+refine its product experience.
+
+From a governance perspective, this study provides transparency into how
+Spotify manages public engagement through app store replies. It reveals
+selective responsiveness to certain emotional tones and topics, raising
+broader questions about fairness, accountability, and communication
+standards in platform behavior. The use of text-as-data methods
+contributes to ongoing policy discussions by empirically examining how
+platform design choices affect user interaction and perceived
+responsiveness.
+
+Future research could expand this analysis by incorporating data from
+other platforms (e.g., Apple or YouTube Music) to allow for comparative
+studies. Further improvements could also include training deep learning
+models on a larger, more diverse dataset or integrating user metadata to
+explore demographic patterns in reply behavior. Besides, while reply
+patterns suggest engagement priorities, further work is needed to fully
+assess transparency and policy implications.
+
+\hypertarget{limitations}{%
+\subsection{Limitations}\label{limitations}}
+
+While the findings offer clear patterns, several limitations remain.
+First, TF-IDF outperformed word embeddings in classification, which may
+reflect insufficient embedding tuning or the brevity of most reviews.
+
+Second, topic modeling and classification outputs showed some conceptual
+overlap, limiting interpretability. Enhanced preprocessing or
+alternative models could improve topic separation.
+
+Third, although the number of retained duplicate reviews is small (270),
+their short and repetitive nature may reduce analytical quality. Word
+clouds also revealed minor stemming issues, such as splitting ``song''
+and ``songs.''
+
+Finally, fewer than 3.5\% of reviews received a reply, significantly
+limiting the statistical power of the regression model.
+
+\hypertarget{r-packages-used}{%
+\subsection{R Packages Used}\label{r-packages-used}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Data Cleaning and Transformation}: \texttt{tidyverse},
+  \texttt{janitor}, \texttt{textclean}, \texttt{hunspell}\\
+\item
+  \textbf{Text Preprocessing}: \texttt{tidytext}, \texttt{quanteda},
+  \texttt{textmineR}, \texttt{quanteda.textstats}\\
+\item
+  \textbf{Topic Modeling}: \texttt{topicmodels}, \texttt{broom.mixed}\\
+\item
+  \textbf{Classification}: \texttt{caret}, \texttt{glmnet},
+  \texttt{e1071}, \texttt{naivebayes}\\
+\item
+  \textbf{Visualization}: \texttt{ggplot2}, \texttt{patchwork},
+  \texttt{wordcloud}, \texttt{RColorBrewer}\\
+\item
+  \textbf{Model Reporting}: \texttt{pscl}, \texttt{modelsummary},
+  \texttt{gridExtra}\\
+\item
+  \textbf{SMOTE Handling}: \texttt{smotefamily}
+\end{itemize}
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begin{itemize}
+\item
+  Looka. (2024). \emph{The Spotify Logo: Embodying the sonic style of a
+  streaming pioneer}. Retrieved April 2025, from
+  \url{https://looka.com/blog/spotify-logo/}
+\item
+  Statista. (2024). \emph{Number of Spotify premium subscribers
+  worldwide from 1st quarter 2015 to 4th quarter of 2024}. Retrieved
+  from
+  \url{https://www.statista.com/statistics/244995/number-of-paying-spotify-subscribers/}
+\item
+  Pang, B., \& Lee, L. (2008). \emph{Opinion mining and sentiment
+  analysis}. Foundations and Trends® in Information Retrieval, 2(1--2),
+  1--135. \url{https://www.nowpublishers.com/article/Details/INR-011}
+\item
+  Liu, B. (2012). \emph{Sentiment analysis and opinion mining}.
+  Springer.
+  \url{https://link.springer.com/book/10.1007/978-3-031-02145-9}
+\item
+  Tirunillai, S., \& Tellis, G. J. (2012). Does online chatter really
+  matter? Dynamics of user-generated content and stock performance.
+  \emph{Marketing Science}, 31(2), 198--215.
+  \href{https://www.researchgate.net/publication/228151131_Does_Online_Chatter_Really_Matter_Dynamics_of_User-Generated_Content_and_Stock_Performance}{https://www.researchgate.net/publication/228151131}
+\item
+  Blei, D. M., Ng, A. Y., \& Jordan, M. I. (2003). Latent Dirichlet
+  Allocation. \emph{Journal of Machine Learning Research}, 3, 993--1022.
+  \href{https://www.researchgate.net/publication/221620547_Latent_Dirichlet_Allocation}{https://www.researchgate.net/publication/221620547}
+\item
+  Datta, H., Knox, G., \& Bronnenberg, B. J. (2018). Changing their
+  tune: How consumers' adoption of online streaming affects music
+  consumption and discovery. \emph{Marketing Science}, 37(1), 5--21.
+  \href{https://www.researchgate.net/publication/293753759_Changing_Their_Tune_How_Consumers\%27_Adoption_of_Online_Streaming_Affects_Music_Consumption_and_Discovery}{https://www.researchgate.net/publication/293753759}
+\item
+  Piskorski, M. J., Shin, J., \& Smith, H. (2019). Social media and
+  customer retention: Implications for the luxury beauty industry.
+  \emph{Journal of Business Research}, 95, 211--219.
+  \href{https://www.researchgate.net/publication/275947382_Social_Media_and_Customer_Retention_Implications_for_the_Luxury_Beauty_Industry}{https://www.researchgate.net/publication/275947382}
+\end{itemize}
+
+\end{document}
