@@ -51,10 +51,3 @@ The analysis pipeline includes the following steps:
 
 - Dataset: [Kaggle - Spotify Google Play Reviews (2022)](https://www.kaggle.com/datasets/mfaaris/spotify-app-reviews-2022)
 - GloVe Embeddings: [Stanford GloVe Project](https://nlp.stanford.edu/projects/glove/)
-
----
-
-## ⚠️ Notes
-
-- The GloVe file is not included due to GitHub's 100MB file limit. You can download it externally and place it in the `/data` directory if needed.
-- Ensure required packages are installed using `requirements.txt` for reproducibility.
